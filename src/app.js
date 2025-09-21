@@ -1,5 +1,17 @@
 import express from "express"; // importa o express
 
+import conectaNaDatabase from "./config/dbConnect.js";
+
+const conexao = await conectaNaDatabase(); // aguarda a conexao com o banco de dados 
+
+conexao.on("error", (erro) => {  //caso ocorra um erro na conexao mostra o erro no console
+    console.error("Erro de conexão", erro);
+});
+
+conexao.once("open", () => {  //se a conexao for sucesso mostra a mensagem no console 
+    console.log("Conexão com o banco feita com sucesso")
+});
+
 const app = express();
 app.use(express.json()); //habilita o express para ler json no corpo da requisicao
 
@@ -53,3 +65,5 @@ app.delete("/livros/:id", (req, res) => {
 })
 
 export default app;
+
+// mongodb+srv://admin:<db_password>@cluster0.mpxgaz2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
