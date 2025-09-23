@@ -2,7 +2,7 @@ import express from "express"; // importa o express
 
 import conectaNaDatabase from "./config/dbConnect.js";
 
-import livro from ".models/Livros.js";
+import router from "./routes/index.js";
 
 const conexao = await conectaNaDatabase(); // aguarda a conexao com o banco de dados 
 
@@ -15,18 +15,8 @@ conexao.once("open", () => {  //se a conexao for sucesso mostra a mensagem no co
 });
 
 const app = express();
-app.use(express.json()); //habilita o express para ler json no corpo da requisicao
+router(app);
 
-
-
-app.get("/", (req, res) => {  //define a rota raiz
-    res.status(200).send("Curso de Node.Js")
-});
-
-app.get("/livros", async (req, res) => { // define a rota /livros
-    const listaDeLivros = await livro.find({});
-    res.status(200).json(listaDeLivros);
-});
 
 app.get("/livros/:id", (req, res) => { 
  const index = buscaLivro(req.params.id)
